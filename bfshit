@@ -1,3 +1,33 @@
+local ZenHub = Instance.new("ScreenGui")
+local Open = Instance.new("TextButton")
+local fuckshit = Instance.new("UICorner")
+local MODILEMAGE = Instance.new("ImageLabel")
+local posto = Instance.new("UIStroke")
+
+fuckshit.Parent = Open
+
+ZenHub.Name = "ZenHub"
+ZenHub.Parent = game.CoreGui
+ZenHub.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+Open.Name = "Open"
+Open.Parent = ZenHub
+Open.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+Open.BorderSizePixel = 0.5
+Open.Position = UDim2.new(0.120833337, 0, 0.0952890813, 0)
+Open.Size = UDim2.new(0, 39, 0, 30)
+Open.Font = Enum.Font.Code
+Open.Text = ""
+Open.TextColor3 = Color3.fromRGB(255,255,255)
+Open.TextScaled = true
+Open.TextSize = 14.000
+Open.TextWrapped = true
+Open.Visible = true
+Open.MouseButton1Click:Connect(function()
+game:GetService("VirtualInputManager"):SendKeyEvent(true,305,false,game)
+    game:GetService("VirtualInputManager"):SendKeyEvent(false,305,false,game)
+    end)
+
 _G.Settings = {
     Auto_Farm_Level = false;
 	Auto_New_World = false;
@@ -1557,7 +1587,7 @@ local PepsisWorld = library:CreateWindow({
 })
 
 local MainTab = PepsisWorld:CreateTab({
-    Name = "General"
+    Name = "Main"
 })
 
 local MainSection = MainTab:CreateSection({
@@ -1966,6 +1996,145 @@ spawn(function()
     end
 end)
 
+MainSection:AddToggle{
+		Name = "Auto Farm Ectoplasm",
+		Flag = "Auto_Farm_Ectoplasm",
+		Value = _G.Settings.Auto_Farm_Ectoplasm,
+		Callback  = function(value)
+			_G.Auto_Farm_Ectoplasm = value
+			_G.Settings.Auto_Farm_Ectoplasm = value
+			saveSettings()
+			StopTween(_G.Auto_Farm_Ectoplasm)
+		end
+	}
+
+	spawn(function()
+		game:GetService("RunService").Heartbeat:Connect(function()
+			pcall(function()
+				for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+					if _G.Auto_Farm_Ectoplasm and MagnetEctoplasm and string.find(v.Name, "Ship") and (v.HumanoidRootPart.Position - PosMonEctoplasm.Position).magnitude <= 350 then
+						v.HumanoidRootPart.CFrame = PosMonEctoplasm
+						v.HumanoidRootPart.CanCollide = false
+						v.HumanoidRootPart.Size = Vector3.new(50,50,50)
+						if v.Humanoid:FindFirstChild("Animator") then
+							v.Humanoid.Animator:Destroy()
+						end
+						sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius",  math.huge)
+					end
+				end
+			end)
+		end)
+	end)
+
+	spawn(function()
+		while wait() do
+			if _G.Auto_Farm_Ectoplasm then
+				pcall(function()
+					if game:GetService("Workspace").Enemies:FindFirstChild("Ship Deckhand [Lv. 1250]") or game:GetService("Workspace").Enemies:FindFirstChild("Ship Engineer [Lv. 1275]") or game:GetService("Workspace").Enemies:FindFirstChild("Ship Steward [Lv. 1300]") or game:GetService("Workspace").Enemies:FindFirstChild("Ship Officer [Lv. 1325]") then
+						for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+							if string.find(v.Name, "Ship") then
+								repeat wait()
+									AutoHaki()
+									EquipWeapon(_G.Select_Weapon)
+									PosMonEctoplasm = v.HumanoidRootPart.CFrame
+									v.HumanoidRootPart.CanCollide = false
+									v.HumanoidRootPart.Size = Vector3.new(50,50,50)
+									getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
+									MagnetEctoplasm = true
+									game:GetService'VirtualUser':CaptureController()
+									game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672))
+								until _G.Auto_Farm_Ectoplasm == false or not v.Parent or v.Humanoid.Health <= 0
+								MagnetEctoplasm = false
+							else
+								MagnetEctoplasm = false
+								getgenv().ToTarget(CFrame.new(904.4072265625, 181.05767822266, 33341.38671875))
+							end
+						end
+					else
+						MagnetEctoplasm = false
+						local Distance = (Vector3.new(904.4072265625, 181.05767822266, 33341.38671875) - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+						if Distance > 20000 then
+							game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("requestEntrance",Vector3.new(923.21252441406, 126.9760055542, 32852.83203125))
+						end
+						getgenv().ToTarget(CFrame.new(904.4072265625, 181.05767822266, 33341.38671875))
+					end
+				end)
+			end
+		end
+	end)
+	
+	MainSection:AddToggle{
+		Name = "Auto Farm Bone",
+		Flag = "Auto_Farm_Bone",
+		Value = _G.Settings.Auto_Farm_Bone,
+		Callback  = function(value)
+			_G.Auto_Farm_Bone = value
+			_G.Settings.Auto_Farm_Bone = value
+			saveSettings()
+			StopTween(_G.Auto_Farm_Bone)
+		end
+	}
+
+	spawn(function()
+		game:GetService("RunService").Heartbeat:Connect(function()
+			pcall(function()
+				for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+					if _G.Auto_Farm_Bone and StartMagnetBoneMon and (v.Name == "Reborn Skeleton [Lv. 1975]" or v.Name == "Living Zombie [Lv. 2000]" or v.Name == "Demonic Soul [Lv. 2025]" or v.Name == "Posessed Mummy [Lv. 2050]") and (v.HumanoidRootPart.Position - PosMonBone.Position).magnitude <= 350 then
+						v.HumanoidRootPart.CFrame = PosMonBone
+						v.HumanoidRootPart.CanCollide = false
+						v.HumanoidRootPart.Size = Vector3.new(50,50,50)
+						if v.Humanoid:FindFirstChild("Animator") then
+							v.Humanoid.Animator:Destroy()
+						end
+						sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius",  math.huge)
+					end
+				end
+			end)
+		end)
+	end)
+
+	spawn(function()
+		while wait() do
+			if _G.Auto_Farm_Bone and World3 then
+				pcall(function()
+					if game:GetService("Workspace").Enemies:FindFirstChild("Reborn Skeleton [Lv. 1975]") or game:GetService("Workspace").Enemies:FindFirstChild("Living Zombie [Lv. 2000]") or game:GetService("Workspace").Enemies:FindFirstChild("Domenic Soul [Lv. 2025]") or game:GetService("Workspace").Enemies:FindFirstChild("Posessed Mummy [Lv. 2050]") then
+						for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+							if v.Name == "Reborn Skeleton [Lv. 1975]" or v.Name == "Living Zombie [Lv. 2000]" or v.Name == "Demonic Soul [Lv. 2025]" or v.Name == "Posessed Mummy [Lv. 2050]" then
+								if v.Humanoid.Health > 0 then
+									repeat wait()
+										AutoHaki()
+										EquipWeapon(_G.Select_Weapon)
+										StartMagnetBoneMon = true
+										v.HumanoidRootPart.CanCollide = false
+										v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
+										PosMonBone = v.HumanoidRootPart.CFrame
+										getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
+										game:GetService'VirtualUser':CaptureController()
+										game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672))
+									until _G.Auto_Farm_Bone == false or not v.Parent or v.Humanoid.Health <= 0
+								end
+							end
+						end
+					else
+						StartMagnetBoneMon = false
+						for i,v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do 
+							if v.Name == "Reborn Skeleton [Lv. 1975]" then
+								getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
+							elseif v.Name == "Living Zombie [Lv. 2000]" then
+								getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
+							elseif v.Name == "Demonic Soul [Lv. 2025]" then
+								getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
+							elseif v.Name == "Posessed Mummy [Lv. 2050]" then
+								getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
+							end
+						end
+						getgenv().ToTarget(CFrame.new(-9466.72949, 171.162918, 6132.01514))
+					end
+				end)
+			end
+		end
+	end)
+
 MainSection:AddToggle({
     Name = "Auto New World",
     Flag = "Auto_New_World",
@@ -2134,9 +2303,9 @@ if World3 then
 		while wait() do
 			pcall(function()
 				if game:GetService("ReplicatedStorage"):FindFirstChild("Diablo [Lv. 1750]") or game:GetService("ReplicatedStorage"):FindFirstChild("Deandre [Lv. 1750]") or game:GetService("ReplicatedStorage"):FindFirstChild("Urban [Lv. 1750]") or game:GetService("Workspace").Enemies:FindFirstChild("Diablo [Lv. 1750]") or game:GetService("Workspace").Enemies:FindFirstChild("Deandre [Lv. 1750]") or game:GetService("Workspace").Enemies:FindFirstChild("Urban [Lv. 1750]") then
-					Elite_Hunter_Status:Set("Status : Spawned!!!")	
+					Elite_Hunter_Status:Set("Status : Spawned")	
 				else
-					Elite_Hunter_Status:Set("Status : Not Spawn!!!")	
+					Elite_Hunter_Status:Set("Status : Not Spawn")	
 				end
 			end)
 		end
@@ -3503,73 +3672,6 @@ elseif World2 then
 	end)
 
 	OtherSection:AddToggle{
-		Name = "Auto Farm Ectoplasm",
-		Flag = "Auto_Farm_Ectoplasm",
-		Value = _G.Settings.Auto_Farm_Ectoplasm,
-		Callback  = function(value)
-			_G.Auto_Farm_Ectoplasm = value
-			_G.Settings.Auto_Farm_Ectoplasm = value
-			saveSettings()
-			StopTween(_G.Auto_Farm_Ectoplasm)
-		end
-	}
-
-	spawn(function()
-		game:GetService("RunService").Heartbeat:Connect(function()
-			pcall(function()
-				for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-					if _G.Auto_Farm_Ectoplasm and MagnetEctoplasm and string.find(v.Name, "Ship") and (v.HumanoidRootPart.Position - PosMonEctoplasm.Position).magnitude <= 350 then
-						v.HumanoidRootPart.CFrame = PosMonEctoplasm
-						v.HumanoidRootPart.CanCollide = false
-						v.HumanoidRootPart.Size = Vector3.new(50,50,50)
-						if v.Humanoid:FindFirstChild("Animator") then
-							v.Humanoid.Animator:Destroy()
-						end
-						sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius",  math.huge)
-					end
-				end
-			end)
-		end)
-	end)
-
-	spawn(function()
-		while wait() do
-			if _G.Auto_Farm_Ectoplasm then
-				pcall(function()
-					if game:GetService("Workspace").Enemies:FindFirstChild("Ship Deckhand [Lv. 1250]") or game:GetService("Workspace").Enemies:FindFirstChild("Ship Engineer [Lv. 1275]") or game:GetService("Workspace").Enemies:FindFirstChild("Ship Steward [Lv. 1300]") or game:GetService("Workspace").Enemies:FindFirstChild("Ship Officer [Lv. 1325]") then
-						for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-							if string.find(v.Name, "Ship") then
-								repeat wait()
-									AutoHaki()
-									EquipWeapon(_G.Select_Weapon)
-									PosMonEctoplasm = v.HumanoidRootPart.CFrame
-									v.HumanoidRootPart.CanCollide = false
-									v.HumanoidRootPart.Size = Vector3.new(50,50,50)
-									getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
-									MagnetEctoplasm = true
-									game:GetService'VirtualUser':CaptureController()
-									game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672))
-								until _G.Auto_Farm_Ectoplasm == false or not v.Parent or v.Humanoid.Health <= 0
-								MagnetEctoplasm = false
-							else
-								MagnetEctoplasm = false
-								getgenv().ToTarget(CFrame.new(904.4072265625, 181.05767822266, 33341.38671875))
-							end
-						end
-					else
-						MagnetEctoplasm = false
-						local Distance = (Vector3.new(904.4072265625, 181.05767822266, 33341.38671875) - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-						if Distance > 20000 then
-							game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("requestEntrance",Vector3.new(923.21252441406, 126.9760055542, 32852.83203125))
-						end
-						getgenv().ToTarget(CFrame.new(904.4072265625, 181.05767822266, 33341.38671875))
-					end
-				end)
-			end
-		end
-	end)
-
-	OtherSection:AddToggle{
 		Name = "Auto Bartilo Quest",
 		Flag = "Auto_Bartilo_Quest",
 		Value = _G.Settings.Auto_Bartilo_Quest,
@@ -4381,478 +4483,7 @@ elseif World3 then
 			end
 		end
 	end)
-
-	OtherSection:AddToggle{
-		Name = "Auto Farm Scrap and Leather",
-		Flag = "Auto_Farm_Scrap_and_Leather",
-		Value = _G.Settings.Auto_Farm_Scrap_and_Leather,
-		Callback  = function(value)
-			_G.Auto_Farm_Scrap_and_Leather = value
-			_G.Settings.Auto_Farm_Scrap_and_Leather = value
-			saveSettings()
-			StopTween(_G.Auto_Farm_Scrap_and_Leather)
-		end
-	}
-
-	spawn(function()
-		game:GetService("RunService").Heartbeat:Connect(function()
-			pcall(function()
-				for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-					if _G.Auto_Farm_Scrap_and_Leather and StartMagnetScrapleatherMon and v.Name == "Pirate Millionaire [Lv. 1500]" and (v.HumanoidRootPart.Position - PosMonScrapleather.Position).magnitude <= 350 then
-						v.HumanoidRootPart.CFrame = PosMonScrapleather
-						v.HumanoidRootPart.CanCollide = false
-						v.HumanoidRootPart.Size = Vector3.new(50,50,50)
-						if v.Humanoid:FindFirstChild("Animator") then
-							v.Humanoid.Animator:Destroy()
-						end
-						sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius",  math.huge)
-					end
-				end
-			end)
-		end)
-	end)
-
-	spawn(function()
-		while wait() do
-			if _G.Auto_Farm_Scrap_and_Leather and World3 then
-				pcall(function()
-					if game:GetService("Workspace").Enemies:FindFirstChild("Pirate Millionaire [Lv. 1500]") then
-						for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-							if v.Name == "Pirate Millionaire [Lv. 1500]" then
-								if v.Humanoid.Health > 0 then
-									repeat wait()
-										AutoHaki()
-										EquipWeapon(_G.Select_Weapon)
-										StartMagnetScrapleatherMon = true
-										v.HumanoidRootPart.CanCollide = false
-										v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
-										PosMonScrapleather = v.HumanoidRootPart.CFrame
-										getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
-										game:GetService'VirtualUser':CaptureController()
-										game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672))
-									until _G.Auto_Farm_Scrap_and_Leather == false or not v.Parent or v.Humanoid.Health <= 0
-								end
-							end
-						end
-					else
-						StartMagnetScrapleatherMon = false
-						for i,v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do 
-							if v.Name == "Pirate Millionaire [Lv. 1500]" then
-								getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
-							end
-						end
-						getgenv().ToTarget(CFrame.new(-275.8073425292969, 44.80481719970703, 5598.36865234375))
-					end
-				end)
-			end
-		end
-	end)
-
-	OtherSection:AddToggle{
-		Name = "Auto Farm GunPowder",
-		Flag = "Auto_Farm_GunPowder",
-		Value = _G.Settings.Auto_Farm_GunPowder,
-		Callback  = function(value)
-			_G.Auto_Farm_GunPowder = value
-			_G.Settings.Auto_Farm_GunPowder = value
-			saveSettings()
-			StopTween(_G.Auto_Farm_GunPowder)
-		end
-	}
-
-	spawn(function()
-		game:GetService("RunService").Heartbeat:Connect(function()
-			pcall(function()
-				for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-					if _G.Auto_Farm_GunPowder and StartMagnetGunPowderMon and v.Name == "Pistol Billionaire [Lv. 1525]" and (v.HumanoidRootPart.Position - PosMonGunPowder.Position).magnitude <= 350 then
-						v.HumanoidRootPart.CFrame = PosMonGunPowder
-						v.HumanoidRootPart.CanCollide = false
-						v.HumanoidRootPart.Size = Vector3.new(50,50,50)
-						if v.Humanoid:FindFirstChild("Animator") then
-							v.Humanoid.Animator:Destroy()
-						end
-						sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius",  math.huge)
-					end
-				end
-			end)
-		end)
-	end)
-
-	spawn(function()
-		while wait() do
-			if _G.Auto_Farm_GunPowder and World3 then
-				pcall(function()
-					if game:GetService("Workspace").Enemies:FindFirstChild("Pistol Billionaire [Lv. 1525]") then
-						for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-							if v.Name == "Pistol Billionaire [Lv. 1525]" then
-								if v.Humanoid.Health > 0 then
-									repeat wait()
-										AutoHaki()
-										EquipWeapon(_G.Select_Weapon)
-										StartMagnetGunPowderMon = true
-										v.HumanoidRootPart.CanCollide = false
-										v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
-										PosMonGunPowder = v.HumanoidRootPart.CFrame
-										getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
-										game:GetService'VirtualUser':CaptureController()
-										game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672))
-									until _G.Auto_Farm_GunPowder == false or not v.Parent or v.Humanoid.Health <= 0
-								end
-							end
-						end
-					else
-						StartMagnetGunPowderMon = false
-						for i,v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do 
-							if v.Name == "Pistol Billionaire [Lv. 1525]" then
-								getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
-							end
-						end
-						getgenv().ToTarget(CFrame.new(-455.71466064453125, 73.72992706298828, 5929.4609375))
-					end
-				end)
-			end
-		end
-	end)
-
-	OtherSection:AddToggle{
-		Name = "Auto Farm Dragon Scales",
-		Flag = "Auto_Farm_Dragon_Scales",
-		Value = _G.Settings.Auto_Farm_Dragon_Scales,
-		Callback  = function(value)
-			_G.Auto_Farm_Dragon_Scales = value
-			_G.Settings.Auto_Farm_Dragon_Scales = value
-			saveSettings()
-			StopTween(_G.Auto_Farm_Dragon_Scales)
-		end
-	}
-
-	spawn(function()
-		game:GetService("RunService").Heartbeat:Connect(function()
-			pcall(function()
-				for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-					if _G.Auto_Farm_Dragon_Scales and StartMagnetDragonScalesMon and (v.Name == "Dragon Crew Warrior [Lv. 1575]") and (v.HumanoidRootPart.Position - PosMonDragonScales.Position).magnitude <= 350 then
-						v.HumanoidRootPart.CFrame = PosMonDragonScales
-						v.HumanoidRootPart.CanCollide = false
-						v.HumanoidRootPart.Size = Vector3.new(50,50,50)
-						if v.Humanoid:FindFirstChild("Animator") then
-							v.Humanoid.Animator:Destroy()
-						end
-						sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius",  math.huge)
-					end
-				end
-			end)
-		end)
-	end)
-
-	spawn(function()
-		while wait() do
-			if _G.Auto_Farm_Dragon_Scales and World3 then
-				pcall(function()
-					if game:GetService("Workspace").Enemies:FindFirstChild("Dragon Crew Warrior [Lv. 1575]") then
-						for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-							if v.Name == "Dragon Crew Warrior [Lv. 1575]" then
-								if v.Humanoid.Health > 0 then
-									repeat wait()
-										AutoHaki()
-										EquipWeapon(_G.Select_Weapon)
-										StartMagnetDragonScalesMon = true
-										v.HumanoidRootPart.CanCollide = false
-										v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
-										PosMonDragonScales = v.HumanoidRootPart.CFrame
-										getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
-										game:GetService'VirtualUser':CaptureController()
-										game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672))
-									until _G.Auto_Farm_Fish_Tail == false or not v.Parent or v.Humanoid.Health <= 0
-								end
-							end
-						end
-					else
-						StartMagnetDragonScalesMon = false
-						for i,v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do 
-							if v.Name == "Dragon Crew Warrior [Lv. 1575]" then
-								getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
-							end
-						end
-						getgenv().ToTarget(CFrame.new(6241.9951171875, 51.522083282471, -1243.9771728516))
-					end
-				end)
-			end
-		end
-	end)
-
-	OtherSection:AddToggle{
-		Name = "Auto Farm Fish Tail",
-		Flag = "Auto_Farm_Fish_Tail",
-		Value = _G.Settings.Auto_Farm_Fish_Tail,
-		Callback  = function(value)
-			_G.Auto_Farm_Fish_Tail = value
-			_G.Settings.Auto_Farm_Fish_Tail = value
-			saveSettings()
-			StopTween(_G.Auto_Farm_Fish_Tail)
-		end
-	}
-
-	spawn(function()
-		game:GetService("RunService").Heartbeat:Connect(function()
-			pcall(function()
-				for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-					if _G.Auto_Farm_Fish_Tail and StartMagnetFishTailMon and (v.Name == "Fishman Raider [Lv. 1775]" or v.Name == "Fishman Captain [Lv. 1800]") and (v.HumanoidRootPart.Position - PosMonFishTail.Position).magnitude <= 350 then
-						v.HumanoidRootPart.CFrame = PosMonFishTail
-						v.HumanoidRootPart.CanCollide = false
-						v.HumanoidRootPart.Size = Vector3.new(50,50,50)
-						if v.Humanoid:FindFirstChild("Animator") then
-							v.Humanoid.Animator:Destroy()
-						end
-						sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius",  math.huge)
-					end
-				end
-			end)
-		end)
-	end)
-
-	spawn(function()
-		while wait() do
-			if _G.Auto_Farm_Fish_Tail and World3 then
-				pcall(function()
-					if game:GetService("Workspace").Enemies:FindFirstChild("Fishman Raider [Lv. 1775]") or game:GetService("Workspace").Enemies:FindFirstChild("Fishman Captain [Lv. 1800]") then
-						for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-							if v.Name == "Fishman Raider [Lv. 1775]" or v.Name == "Fishman Captain [Lv. 1800]" then
-								if v.Humanoid.Health > 0 then
-									repeat wait()
-										AutoHaki()
-										EquipWeapon(_G.Select_Weapon)
-										StartMagnetFishTailMon = true
-										v.HumanoidRootPart.CanCollide = false
-										v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
-										PosMonFishTail = v.HumanoidRootPart.CFrame
-										getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
-										game:GetService'VirtualUser':CaptureController()
-										game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672))
-									until _G.Auto_Farm_Fish_Tail == false or not v.Parent or v.Humanoid.Health <= 0
-								end
-							end
-						end
-					else
-						StartMagnetFishTailMon = false
-						for i,v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do 
-							if v.Name == "Fishman Raider [Lv. 1775]" then
-								getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
-							elseif v.Name == "Fishman Captain [Lv. 1800]" then
-								getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
-							end
-						end
-						getgenv().ToTarget(CFrame.new(-10322.400390625, 390.94473266602, -8580.0908203125))
-					end
-				end)
-			end
-		end
-	end)
-
-	OtherSection:AddToggle{
-		Name = "Auto Farm Mini Tusk",
-		Flag = "Auto_Farm_Mini_Tusk",
-		Value = _G.Settings.Auto_Farm_Mini_Tusk,
-		Callback  = function(value)
-			_G.Auto_Farm_Mini_Tusk = value
-			_G.Settings.Auto_Farm_Mini_Tusk = value
-			saveSettings()
-			StopTween(_G.Auto_Farm_Mini_Tusk)
-		end
-	}
-
-	spawn(function()
-		game:GetService("RunService").Heartbeat:Connect(function()
-			pcall(function()
-				for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-					if _G.Auto_Farm_Mini_Tusk and StartMagnetMiniTuskMon and v.Name == "Mythological Pirate [Lv. 1850]" and (v.HumanoidRootPart.Position - PosMonMiniTusk.Position).magnitude <= 350 then
-						v.HumanoidRootPart.CFrame = PosMonMiniTusk
-						v.HumanoidRootPart.CanCollide = false
-						v.HumanoidRootPart.Size = Vector3.new(50,50,50)
-						if v.Humanoid:FindFirstChild("Animator") then
-							v.Humanoid.Animator:Destroy()
-						end
-						sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius",  math.huge)
-					end
-				end
-			end)
-		end)
-	end)
-
-	spawn(function()
-		while wait() do
-			if _G.Auto_Farm_Mini_Tusk and World3 then
-				pcall(function()
-					if game:GetService("Workspace").Enemies:FindFirstChild("Mythological Pirate [Lv. 1850]") then
-						for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-							if v.Name == "Mythological Pirate [Lv. 1850]" then
-								if v.Humanoid.Health > 0 then
-									repeat wait()
-										AutoHaki()
-										EquipWeapon(_G.Select_Weapon)
-										StartMagnetMiniTuskMon = true
-										v.HumanoidRootPart.CanCollide = false
-										v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
-										PosMonMiniTusk = v.HumanoidRootPart.CFrame
-										getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
-										game:GetService'VirtualUser':CaptureController()
-										game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672))
-									until _G.Auto_Farm_Mini_Tusk == false or not v.Parent or v.Humanoid.Health <= 0
-								end
-							end
-						end
-					else
-						StartMagnetMiniTuskMon = false
-						for i,v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do 
-							if v.Name == "Mythological Pirate [Lv. 1850]" then
-								getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
-							end
-						end
-						getgenv().ToTarget(CFrame.new(-13508.68359375, 582.6758422851562, -6986.06298828125))
-					end
-				end)
-			end
-		end
-	end)
 	
-	OtherSection:AddToggle{
-		Name = "Auto Farm Bone",
-		Flag = "Auto_Farm_Bone",
-		Value = _G.Settings.Auto_Farm_Bone,
-		Callback  = function(value)
-			_G.Auto_Farm_Bone = value
-			_G.Settings.Auto_Farm_Bone = value
-			saveSettings()
-			StopTween(_G.Auto_Farm_Bone)
-		end
-	}
-
-	spawn(function()
-		game:GetService("RunService").Heartbeat:Connect(function()
-			pcall(function()
-				for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-					if _G.Auto_Farm_Bone and StartMagnetBoneMon and (v.Name == "Reborn Skeleton [Lv. 1975]" or v.Name == "Living Zombie [Lv. 2000]" or v.Name == "Demonic Soul [Lv. 2025]" or v.Name == "Posessed Mummy [Lv. 2050]") and (v.HumanoidRootPart.Position - PosMonBone.Position).magnitude <= 350 then
-						v.HumanoidRootPart.CFrame = PosMonBone
-						v.HumanoidRootPart.CanCollide = false
-						v.HumanoidRootPart.Size = Vector3.new(50,50,50)
-						if v.Humanoid:FindFirstChild("Animator") then
-							v.Humanoid.Animator:Destroy()
-						end
-						sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius",  math.huge)
-					end
-				end
-			end)
-		end)
-	end)
-
-	spawn(function()
-		while wait() do
-			if _G.Auto_Farm_Bone and World3 then
-				pcall(function()
-					if game:GetService("Workspace").Enemies:FindFirstChild("Reborn Skeleton [Lv. 1975]") or game:GetService("Workspace").Enemies:FindFirstChild("Living Zombie [Lv. 2000]") or game:GetService("Workspace").Enemies:FindFirstChild("Domenic Soul [Lv. 2025]") or game:GetService("Workspace").Enemies:FindFirstChild("Posessed Mummy [Lv. 2050]") then
-						for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-							if v.Name == "Reborn Skeleton [Lv. 1975]" or v.Name == "Living Zombie [Lv. 2000]" or v.Name == "Demonic Soul [Lv. 2025]" or v.Name == "Posessed Mummy [Lv. 2050]" then
-								if v.Humanoid.Health > 0 then
-									repeat wait()
-										AutoHaki()
-										EquipWeapon(_G.Select_Weapon)
-										StartMagnetBoneMon = true
-										v.HumanoidRootPart.CanCollide = false
-										v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
-										PosMonBone = v.HumanoidRootPart.CFrame
-										getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
-										game:GetService'VirtualUser':CaptureController()
-										game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672))
-									until _G.Auto_Farm_Bone == false or not v.Parent or v.Humanoid.Health <= 0
-								end
-							end
-						end
-					else
-						StartMagnetBoneMon = false
-						for i,v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do 
-							if v.Name == "Reborn Skeleton [Lv. 1975]" then
-								getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
-							elseif v.Name == "Living Zombie [Lv. 2000]" then
-								getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
-							elseif v.Name == "Demonic Soul [Lv. 2025]" then
-								getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
-							elseif v.Name == "Posessed Mummy [Lv. 2050]" then
-								getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
-							end
-						end
-						getgenv().ToTarget(CFrame.new(-9466.72949, 171.162918, 6132.01514))
-					end
-				end)
-			end
-		end
-	end)
-
-	OtherSection:AddToggle{
-		Name = "Auto Farm Conjured Cocoa",
-		Flag = "Auto_Farm_Conjured_Cocoa",
-		Value = _G.Settings.Auto_Farm_Conjured_Cocoa,
-		Callback  = function(value)
-			_G.Auto_Farm_Conjured_Cocoa = value
-			_G.Settings.Auto_Farm_Conjured_Cocoa = value
-			saveSettings()
-			StopTween(_G.Auto_Farm_Conjured_Cocoa)
-		end
-	}
-
-	spawn(function()
-		game:GetService("RunService").Heartbeat:Connect(function()
-			pcall(function()
-				for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-					if _G.Auto_Farm_Conjured_Cocoa and StartMagnetConjuredCocoaMon and (v.Name == "Cocoa Warrior [Lv. 2300]" or v.Name == "Chocolate Bar Battler [Lv. 2325]") and (v.HumanoidRootPart.Position - PosMonConjuredCocoa.Position).magnitude <= 350 then
-						v.HumanoidRootPart.CFrame = PosMonConjuredCocoa
-						v.HumanoidRootPart.CanCollide = false
-						v.HumanoidRootPart.Size = Vector3.new(50,50,50)
-						if v.Humanoid:FindFirstChild("Animator") then
-							v.Humanoid.Animator:Destroy()
-						end
-						sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius",  math.huge)
-					end
-				end
-			end)
-		end)
-	end)
-
-	spawn(function()
-		while wait() do
-			if _G.Auto_Farm_Conjured_Cocoa and World3 then
-				pcall(function()
-					if game:GetService("Workspace").Enemies:FindFirstChild("Cocoa Warrior [Lv. 2300]") or game:GetService("Workspace").Enemies:FindFirstChild("Chocolate Bar Battler [Lv. 2325]") then
-						for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-							if v.Name == "Cocoa Warrior [Lv. 2300]" or v.Name == "Chocolate Bar Battler [Lv. 2325]" then
-								if v.Humanoid.Health > 0 then
-									repeat wait()
-										AutoHaki()
-										EquipWeapon(_G.Select_Weapon)
-										StartMagnetConjuredCocoaMon = true
-										v.HumanoidRootPart.CanCollide = false
-										v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
-										PosMonConjuredCocoa = v.HumanoidRootPart.CFrame
-										getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
-										game:GetService'VirtualUser':CaptureController()
-										game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672))
-									until _G.Auto_Farm_Conjured_Cocoa == false or not v.Parent or v.Humanoid.Health <= 0
-								end
-							end
-						end
-					else
-						StartMagnetConjuredCocoaMon = false
-						for i,v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do 
-							if v.Name == "Cocoa Warrior [Lv. 2300]" then
-								getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
-							elseif v.Name == "Chocolate Bar Battler [Lv. 2325]" then
-								getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
-							end
-						end
-						getgenv().ToTarget(CFrame.new(402.7189025878906, 81.06050109863281, -12259.54296875))
-					end
-				end)
-			end
-		end
-	end)
 
 	OtherSection:AddToggle{
 		Name = "Auto Open Dough Dungeon",
@@ -5510,8 +5141,417 @@ elseif World3 then
 			end
 		end
 	end)
-
 end
+
+local OtherSection1 = MainTab:CreateSection({
+    Name = "Auto Materials",
+	Side = "Right"
+})
+
+	OtherSection1:AddToggle{
+		Name = "Auto Farm Scrap and Leather",
+		Flag = "Auto_Farm_Scrap_and_Leather",
+		Value = _G.Settings.Auto_Farm_Scrap_and_Leather,
+		Callback  = function(value)
+			_G.Auto_Farm_Scrap_and_Leather = value
+			_G.Settings.Auto_Farm_Scrap_and_Leather = value
+			saveSettings()
+			StopTween(_G.Auto_Farm_Scrap_and_Leather)
+		end
+	}
+
+	spawn(function()
+		game:GetService("RunService").Heartbeat:Connect(function()
+			pcall(function()
+				for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+					if _G.Auto_Farm_Scrap_and_Leather and StartMagnetScrapleatherMon and v.Name == "Pirate Millionaire [Lv. 1500]" and (v.HumanoidRootPart.Position - PosMonScrapleather.Position).magnitude <= 350 then
+						v.HumanoidRootPart.CFrame = PosMonScrapleather
+						v.HumanoidRootPart.CanCollide = false
+						v.HumanoidRootPart.Size = Vector3.new(50,50,50)
+						if v.Humanoid:FindFirstChild("Animator") then
+							v.Humanoid.Animator:Destroy()
+						end
+						sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius",  math.huge)
+					end
+				end
+			end)
+		end)
+	end)
+
+	spawn(function()
+		while wait() do
+			if _G.Auto_Farm_Scrap_and_Leather and World3 then
+				pcall(function()
+					if game:GetService("Workspace").Enemies:FindFirstChild("Pirate Millionaire [Lv. 1500]") then
+						for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+							if v.Name == "Pirate Millionaire [Lv. 1500]" then
+								if v.Humanoid.Health > 0 then
+									repeat wait()
+										AutoHaki()
+										EquipWeapon(_G.Select_Weapon)
+										StartMagnetScrapleatherMon = true
+										v.HumanoidRootPart.CanCollide = false
+										v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
+										PosMonScrapleather = v.HumanoidRootPart.CFrame
+										getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
+										game:GetService'VirtualUser':CaptureController()
+										game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672))
+									until _G.Auto_Farm_Scrap_and_Leather == false or not v.Parent or v.Humanoid.Health <= 0
+								end
+							end
+						end
+					else
+						StartMagnetScrapleatherMon = false
+						for i,v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do 
+							if v.Name == "Pirate Millionaire [Lv. 1500]" then
+								getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
+							end
+						end
+						getgenv().ToTarget(CFrame.new(-275.8073425292969, 44.80481719970703, 5598.36865234375))
+					end
+				end)
+			end
+		end
+	end)
+
+	OtherSection1:AddToggle{
+		Name = "Auto Farm GunPowder",
+		Flag = "Auto_Farm_GunPowder",
+		Value = _G.Settings.Auto_Farm_GunPowder,
+		Callback  = function(value)
+			_G.Auto_Farm_GunPowder = value
+			_G.Settings.Auto_Farm_GunPowder = value
+			saveSettings()
+			StopTween(_G.Auto_Farm_GunPowder)
+		end
+	}
+
+	spawn(function()
+		game:GetService("RunService").Heartbeat:Connect(function()
+			pcall(function()
+				for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+					if _G.Auto_Farm_GunPowder and StartMagnetGunPowderMon and v.Name == "Pistol Billionaire [Lv. 1525]" and (v.HumanoidRootPart.Position - PosMonGunPowder.Position).magnitude <= 350 then
+						v.HumanoidRootPart.CFrame = PosMonGunPowder
+						v.HumanoidRootPart.CanCollide = false
+						v.HumanoidRootPart.Size = Vector3.new(50,50,50)
+						if v.Humanoid:FindFirstChild("Animator") then
+							v.Humanoid.Animator:Destroy()
+						end
+						sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius",  math.huge)
+					end
+				end
+			end)
+		end)
+	end)
+
+	spawn(function()
+		while wait() do
+			if _G.Auto_Farm_GunPowder and World3 then
+				pcall(function()
+					if game:GetService("Workspace").Enemies:FindFirstChild("Pistol Billionaire [Lv. 1525]") then
+						for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+							if v.Name == "Pistol Billionaire [Lv. 1525]" then
+								if v.Humanoid.Health > 0 then
+									repeat wait()
+										AutoHaki()
+										EquipWeapon(_G.Select_Weapon)
+										StartMagnetGunPowderMon = true
+										v.HumanoidRootPart.CanCollide = false
+										v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
+										PosMonGunPowder = v.HumanoidRootPart.CFrame
+										getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
+										game:GetService'VirtualUser':CaptureController()
+										game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672))
+									until _G.Auto_Farm_GunPowder == false or not v.Parent or v.Humanoid.Health <= 0
+								end
+							end
+						end
+					else
+						StartMagnetGunPowderMon = false
+						for i,v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do 
+							if v.Name == "Pistol Billionaire [Lv. 1525]" then
+								getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
+							end
+						end
+						getgenv().ToTarget(CFrame.new(-455.71466064453125, 73.72992706298828, 5929.4609375))
+					end
+				end)
+			end
+		end
+	end)
+
+	OtherSection1:AddToggle{
+		Name = "Auto Farm Dragon Scales",
+		Flag = "Auto_Farm_Dragon_Scales",
+		Value = _G.Settings.Auto_Farm_Dragon_Scales,
+		Callback  = function(value)
+			_G.Auto_Farm_Dragon_Scales = value
+			_G.Settings.Auto_Farm_Dragon_Scales = value
+			saveSettings()
+			StopTween(_G.Auto_Farm_Dragon_Scales)
+		end
+	}
+
+	spawn(function()
+		game:GetService("RunService").Heartbeat:Connect(function()
+			pcall(function()
+				for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+					if _G.Auto_Farm_Dragon_Scales and StartMagnetDragonScalesMon and (v.Name == "Dragon Crew Warrior [Lv. 1575]") and (v.HumanoidRootPart.Position - PosMonDragonScales.Position).magnitude <= 350 then
+						v.HumanoidRootPart.CFrame = PosMonDragonScales
+						v.HumanoidRootPart.CanCollide = false
+						v.HumanoidRootPart.Size = Vector3.new(50,50,50)
+						if v.Humanoid:FindFirstChild("Animator") then
+							v.Humanoid.Animator:Destroy()
+						end
+						sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius",  math.huge)
+					end
+				end
+			end)
+		end)
+	end)
+
+	spawn(function()
+		while wait() do
+			if _G.Auto_Farm_Dragon_Scales and World3 then
+				pcall(function()
+					if game:GetService("Workspace").Enemies:FindFirstChild("Dragon Crew Warrior [Lv. 1575]") then
+						for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+							if v.Name == "Dragon Crew Warrior [Lv. 1575]" then
+								if v.Humanoid.Health > 0 then
+									repeat wait()
+										AutoHaki()
+										EquipWeapon(_G.Select_Weapon)
+										StartMagnetDragonScalesMon = true
+										v.HumanoidRootPart.CanCollide = false
+										v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
+										PosMonDragonScales = v.HumanoidRootPart.CFrame
+										getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
+										game:GetService'VirtualUser':CaptureController()
+										game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672))
+									until _G.Auto_Farm_Fish_Tail == false or not v.Parent or v.Humanoid.Health <= 0
+								end
+							end
+						end
+					else
+						StartMagnetDragonScalesMon = false
+						for i,v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do 
+							if v.Name == "Dragon Crew Warrior [Lv. 1575]" then
+								getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
+							end
+						end
+						getgenv().ToTarget(CFrame.new(6241.9951171875, 51.522083282471, -1243.9771728516))
+					end
+				end)
+			end
+		end
+	end)
+
+	OtherSection1:AddToggle{
+		Name = "Auto Farm Fish Tail",
+		Flag = "Auto_Farm_Fish_Tail",
+		Value = _G.Settings.Auto_Farm_Fish_Tail,
+		Callback  = function(value)
+			_G.Auto_Farm_Fish_Tail = value
+			_G.Settings.Auto_Farm_Fish_Tail = value
+			saveSettings()
+			StopTween(_G.Auto_Farm_Fish_Tail)
+		end
+	}
+
+	spawn(function()
+		game:GetService("RunService").Heartbeat:Connect(function()
+			pcall(function()
+				for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+					if _G.Auto_Farm_Fish_Tail and StartMagnetFishTailMon and (v.Name == "Fishman Raider [Lv. 1775]" or v.Name == "Fishman Captain [Lv. 1800]") and (v.HumanoidRootPart.Position - PosMonFishTail.Position).magnitude <= 350 then
+						v.HumanoidRootPart.CFrame = PosMonFishTail
+						v.HumanoidRootPart.CanCollide = false
+						v.HumanoidRootPart.Size = Vector3.new(50,50,50)
+						if v.Humanoid:FindFirstChild("Animator") then
+							v.Humanoid.Animator:Destroy()
+						end
+						sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius",  math.huge)
+					end
+				end
+			end)
+		end)
+	end)
+
+	spawn(function()
+		while wait() do
+			if _G.Auto_Farm_Fish_Tail and World3 then
+				pcall(function()
+					if game:GetService("Workspace").Enemies:FindFirstChild("Fishman Raider [Lv. 1775]") or game:GetService("Workspace").Enemies:FindFirstChild("Fishman Captain [Lv. 1800]") then
+						for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+							if v.Name == "Fishman Raider [Lv. 1775]" or v.Name == "Fishman Captain [Lv. 1800]" then
+								if v.Humanoid.Health > 0 then
+									repeat wait()
+										AutoHaki()
+										EquipWeapon(_G.Select_Weapon)
+										StartMagnetFishTailMon = true
+										v.HumanoidRootPart.CanCollide = false
+										v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
+										PosMonFishTail = v.HumanoidRootPart.CFrame
+										getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
+										game:GetService'VirtualUser':CaptureController()
+										game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672))
+									until _G.Auto_Farm_Fish_Tail == false or not v.Parent or v.Humanoid.Health <= 0
+								end
+							end
+						end
+					else
+						StartMagnetFishTailMon = false
+						for i,v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do 
+							if v.Name == "Fishman Raider [Lv. 1775]" then
+								getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
+							elseif v.Name == "Fishman Captain [Lv. 1800]" then
+								getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
+							end
+						end
+						getgenv().ToTarget(CFrame.new(-10322.400390625, 390.94473266602, -8580.0908203125))
+					end
+				end)
+			end
+		end
+	end)
+
+	OtherSection1:AddToggle{
+		Name = "Auto Farm Mini Tusk",
+		Flag = "Auto_Farm_Mini_Tusk",
+		Value = _G.Settings.Auto_Farm_Mini_Tusk,
+		Callback  = function(value)
+			_G.Auto_Farm_Mini_Tusk = value
+			_G.Settings.Auto_Farm_Mini_Tusk = value
+			saveSettings()
+			StopTween(_G.Auto_Farm_Mini_Tusk)
+		end
+	}
+
+	spawn(function()
+		game:GetService("RunService").Heartbeat:Connect(function()
+			pcall(function()
+				for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+					if _G.Auto_Farm_Mini_Tusk and StartMagnetMiniTuskMon and v.Name == "Mythological Pirate [Lv. 1850]" and (v.HumanoidRootPart.Position - PosMonMiniTusk.Position).magnitude <= 350 then
+						v.HumanoidRootPart.CFrame = PosMonMiniTusk
+						v.HumanoidRootPart.CanCollide = false
+						v.HumanoidRootPart.Size = Vector3.new(50,50,50)
+						if v.Humanoid:FindFirstChild("Animator") then
+							v.Humanoid.Animator:Destroy()
+						end
+						sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius",  math.huge)
+					end
+				end
+			end)
+		end)
+	end)
+
+	spawn(function()
+		while wait() do
+			if _G.Auto_Farm_Mini_Tusk and World3 then
+				pcall(function()
+					if game:GetService("Workspace").Enemies:FindFirstChild("Mythological Pirate [Lv. 1850]") then
+						for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+							if v.Name == "Mythological Pirate [Lv. 1850]" then
+								if v.Humanoid.Health > 0 then
+									repeat wait()
+										AutoHaki()
+										EquipWeapon(_G.Select_Weapon)
+										StartMagnetMiniTuskMon = true
+										v.HumanoidRootPart.CanCollide = false
+										v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
+										PosMonMiniTusk = v.HumanoidRootPart.CFrame
+										getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
+										game:GetService'VirtualUser':CaptureController()
+										game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672))
+									until _G.Auto_Farm_Mini_Tusk == false or not v.Parent or v.Humanoid.Health <= 0
+								end
+							end
+						end
+					else
+						StartMagnetMiniTuskMon = false
+						for i,v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do 
+							if v.Name == "Mythological Pirate [Lv. 1850]" then
+								getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
+							end
+						end
+						getgenv().ToTarget(CFrame.new(-13508.68359375, 582.6758422851562, -6986.06298828125))
+					end
+				end)
+			end
+		end
+		
+OtherSection1:AddToggle{
+		Name = "Auto Farm Conjured Cocoa",
+		Flag = "Auto_Farm_Conjured_Cocoa",
+		Value = _G.Settings.Auto_Farm_Conjured_Cocoa,
+		Callback  = function(value)
+			_G.Auto_Farm_Conjured_Cocoa = value
+			_G.Settings.Auto_Farm_Conjured_Cocoa = value
+			saveSettings()
+			StopTween(_G.Auto_Farm_Conjured_Cocoa)
+		end
+	}
+
+	spawn(function()
+		game:GetService("RunService").Heartbeat:Connect(function()
+			pcall(function()
+				for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+					if _G.Auto_Farm_Conjured_Cocoa and StartMagnetConjuredCocoaMon and (v.Name == "Cocoa Warrior [Lv. 2300]" or v.Name == "Chocolate Bar Battler [Lv. 2325]") and (v.HumanoidRootPart.Position - PosMonConjuredCocoa.Position).magnitude <= 350 then
+						v.HumanoidRootPart.CFrame = PosMonConjuredCocoa
+						v.HumanoidRootPart.CanCollide = false
+						v.HumanoidRootPart.Size = Vector3.new(50,50,50)
+						if v.Humanoid:FindFirstChild("Animator") then
+							v.Humanoid.Animator:Destroy()
+						end
+						sethiddenproperty(game.Players.LocalPlayer, "SimulationRadius",  math.huge)
+					end
+				end
+			end)
+		end)
+	end)
+
+	spawn(function()
+		while wait() do
+			if _G.Auto_Farm_Conjured_Cocoa and World3 then
+				pcall(function()
+					if game:GetService("Workspace").Enemies:FindFirstChild("Cocoa Warrior [Lv. 2300]") or game:GetService("Workspace").Enemies:FindFirstChild("Chocolate Bar Battler [Lv. 2325]") then
+						for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
+							if v.Name == "Cocoa Warrior [Lv. 2300]" or v.Name == "Chocolate Bar Battler [Lv. 2325]" then
+								if v.Humanoid.Health > 0 then
+									repeat wait()
+										AutoHaki()
+										EquipWeapon(_G.Select_Weapon)
+										StartMagnetConjuredCocoaMon = true
+										v.HumanoidRootPart.CanCollide = false
+										v.HumanoidRootPart.Size = Vector3.new(60, 60, 60)
+										PosMonConjuredCocoa = v.HumanoidRootPart.CFrame
+										getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
+										game:GetService'VirtualUser':CaptureController()
+										game:GetService'VirtualUser':Button1Down(Vector2.new(1280, 672))
+									until _G.Auto_Farm_Conjured_Cocoa == false or not v.Parent or v.Humanoid.Health <= 0
+								end
+							end
+						end
+					else
+						StartMagnetConjuredCocoaMon = false
+						for i,v in pairs(game:GetService("ReplicatedStorage"):GetChildren()) do 
+							if v.Name == "Cocoa Warrior [Lv. 2300]" then
+								getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
+							elseif v.Name == "Chocolate Bar Battler [Lv. 2325]" then
+								getgenv().ToTarget(v.HumanoidRootPart.CFrame * CFrame.new(0,_G.Select_Distance,0))
+							end
+						end
+						getgenv().ToTarget(CFrame.new(402.7189025878906, 81.06050109863281, -12259.54296875))
+					end
+				end)
+			end
+		end
+	end)
+	end)
+
+local FightingStyleSection = MainTab:CreateSection({
+    Name = "FightingStyle",
+	Side = "Right"
+})
 
 local FightingStyleSection = MainTab:CreateSection({
     Name = "FightingStyle",
@@ -6381,82 +6421,82 @@ local PlayerSwordSection = PlayerTab:CreateSection({
 })
 
 local Saber = PlayerSwordSection:AddLabel({
-	Name = "âŒ : Saber",
+	Name = "Ã¢ÂÅ’ : Saber",
 	Flag = ""
 })
 
 local Rengoku = PlayerSwordSection:AddLabel({
-	Name = "âŒ : Rengoku",
+	Name = "Ã¢ÂÅ’ : Rengoku",
 	Flag = ""
 })
 
 local Midnight_Blade = PlayerSwordSection:AddLabel({
-	Name = "âŒ : Midnight Blade",
+	Name = "Ã¢ÂÅ’ : Midnight Blade",
 	Flag = ""
 })
 
 local Dragon_Trident = PlayerSwordSection:AddLabel({
-	Name = "âŒ : Dragon Trident",
+	Name = "Ã¢ÂÅ’ : Dragon Trident",
 	Flag = ""
 })
 
 local Yama = PlayerSwordSection:AddLabel({
-	Name = "âŒ : Yama",
+	Name = "Ã¢ÂÅ’ : Yama",
 	Flag = ""
 })
 
 local Buddy_Sword = PlayerSwordSection:AddLabel({
-	Name = "âŒ : Buddy Sword",
+	Name = "Ã¢ÂÅ’ : Buddy Sword",
 	Flag = ""
 })
 
 local Canvander = PlayerSwordSection:AddLabel({
-	Name = "âŒ : Canvander",
+	Name = "Ã¢ÂÅ’ : Canvander",
 	Flag = ""
 })
 
 local Twin_Hooks = PlayerSwordSection:AddLabel({
-	Name = "âŒ : Twin Hooks",
+	Name = "Ã¢ÂÅ’ : Twin Hooks",
 	Flag = ""
 })
 
 local Spikey_Trident = PlayerSwordSection:AddLabel({
-	Name = "âŒ : Spikey Trident",
+	Name = "Ã¢ÂÅ’ : Spikey Trident",
 	Flag = ""
 })
 
 local Hallow_Scythe = PlayerSwordSection:AddLabel({
-	Name = "âŒ : Hallow Scythe",
+	Name = "Ã¢ÂÅ’ : Hallow Scythe",
 	Flag = ""
 })
 
 local Dark_Dagger = PlayerSwordSection:AddLabel({
-	Name = "âŒ : Dark Dagger",
+	Name = "Ã¢ÂÅ’ : Dark Dagger",
 	Flag = ""
 })
 
 local Tushita = PlayerSwordSection:AddLabel({
-	Name = "âŒ : Tushita",
+	Name = "Ã¢ÂÅ’ : Tushita",
 	Flag = ""
 })
 
 local Shisui = PlayerSwordSection:AddLabel({
-	Name = "âŒ : Shisui",
+	Name = "Ã¢ÂÅ’ : Shisui",
 	Flag = ""
 })
 
 local Saddi = PlayerSwordSection:AddLabel({
-	Name = "âŒ : Saddi",
+	Name = "Ã¢ÂÅ’ : Saddi",
 	Flag = ""
 })
 
 local Wando = PlayerSwordSection:AddLabel({
-	Name = "âŒ : Wando",
+	Name = "Ã¢ÂÅ’ : Wando",
 	Flag = ""
 })
 
 local True_Triple_Katana = PlayerSwordSection:AddLabel({
-	Name = "âŒ : True Triple Katana",
+	Name = "Ã¢ÂÅ’ : True Triple Katana",
 	Flag = ""
 })
 
@@ -6465,52 +6505,52 @@ spawn(function()
         pcall(function()
             for i,v in pairs(game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("getInventoryWeapons")) do
                 if v.Name == "Saber" or game:GetService("Players").LocalPlayer.Character:FindFirstChild("Saber") or game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Saber") then
-                    Saber:Set("âœ… : Saber")
+                    Saber:Set("Ã¢Å“â€¦ : Saber")
                 end
                 if v.Name == "Rengoku" or game:GetService("Players").LocalPlayer.Character:FindFirstChild("Rengoku") or game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Rengoku") then
-                    Rengoku:Set("âœ… : Rengoku")
+                    Rengoku:Set("Ã¢Å“â€¦ : Rengoku")
                 end
                 if v.Name == "Midnight Blade" or game:GetService("Players").LocalPlayer.Character:FindFirstChild("Midnight Blade") or game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Midnight Blade") then
-                    Midnight_Blade:Set("âœ… : Midnight Blade")
+                    Midnight_Blade:Set("Ã¢Å“â€¦ : Midnight Blade")
                 end
                 if v.Name == "Dragon Trident" or game:GetService("Players").LocalPlayer.Character:FindFirstChild("Dragon Trident") or game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Dragon Trident") then
-                    Dragon_Trident:Set("âœ… : Dragon Trident")
+                    Dragon_Trident:Set("Ã¢Å“â€¦ : Dragon Trident")
                 end
                 if v.Name == "Yama" or game:GetService("Players").LocalPlayer.Character:FindFirstChild("Yama") or game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Yama") then
-                    Yama:Set("âœ… : Yama")
+                    Yama:Set("Ã¢Å“â€¦ : Yama")
                 end
                 if v.Name == "Buddy Sword" or game:GetService("Players").LocalPlayer.Character:FindFirstChild("Buddy Sword") or game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Buddy Sword") then
-                    Buddy_Sword:Set("âœ… : Buddy Sword")
+                    Buddy_Sword:Set("Ã¢Å“â€¦ : Buddy Sword")
                 end
                 if v.Name == "Canvander" or game:GetService("Players").LocalPlayer.Character:FindFirstChild("Canvander") or game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Canvander") then
-                    Canvander:Set("âœ… : Canvander")
+                    Canvander:Set("Ã¢Å“â€¦ : Canvander")
                 end
                 if v.Name == "Twin Hooks" or game:GetService("Players").LocalPlayer.Character:FindFirstChild("Twin Hooks") or game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Twin Hooks") then
-                    Twin_Hooks:Set("âœ… : Twin Hooks")
+                    Twin_Hooks:Set("Ã¢Å“â€¦ : Twin Hooks")
                 end
                 if v.Name == "Spikey Trident" or game:GetService("Players").LocalPlayer.Character:FindFirstChild("Spikey Trident") or game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Spikey Trident") then
-                    Spikey_Trident:Set("âœ… : Spikey Trident")
+                    Spikey_Trident:Set("Ã¢Å“â€¦ : Spikey Trident")
                 end
                 if v.Name == "Hallow Scythe" or game:GetService("Players").LocalPlayer.Character:FindFirstChild("Hallow Scythe") or game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Hallow Scythe") then
-                    Hallow_Scythe:Set("âœ… : Hallow Scythe")
+                    Hallow_Scythe:Set("Ã¢Å“â€¦ : Hallow Scythe")
                 end
                 if v.Name == "Dark Dagger" or game:GetService("Players").LocalPlayer.Character:FindFirstChild("Dark Dagger") or game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Dark Dagger") then
-                    Dark_Dagger:Set("âœ… : Dark Dagger")
+                    Dark_Dagger:Set("Ã¢Å“â€¦ : Dark Dagger")
                 end
                 if v.Name == "Tushita" or game:GetService("Players").LocalPlayer.Character:FindFirstChild("Tushita") or game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Tushita") then
-                    Tushita:Set("âœ… : Tushita")
+                    Tushita:Set("Ã¢Å“â€¦ : Tushita")
                 end
 				if v.Name == "Shisui" or game:GetService("Players").LocalPlayer.Character:FindFirstChild("Shisui") or game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Shisui") then
-                    Shisui:Set("âœ… : Shisui")
+                    Shisui:Set("Ã¢Å“â€¦ : Shisui")
                 end
                 if v.Name == "Saddi" or game:GetService("Players").LocalPlayer.Character:FindFirstChild("Saddi") or game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Saddi") then
-                    Saddi:Set("âœ… : Saddi")
+                    Saddi:Set("Ã¢Å“â€¦ : Saddi")
                 end
                 if v.Name == "Wando" or game:GetService("Players").LocalPlayer.Character:FindFirstChild("Wando") or game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("Wando") then
-                    Wando:Set("âœ… : Wando")
+                    Wando:Set("Ã¢Å“â€¦ : Wando")
                 end
                 if v.Name == "True Triple Katana" or game:GetService("Players").LocalPlayer.Character:FindFirstChild("True Triple Katana") or game:GetService("Players").LocalPlayer.Backpack:FindFirstChild("True Triple Katana") then
-                    True_Triple_Katana:Set("âœ… : True Triple Katana")
+                    True_Triple_Katana:Set("Ã¢Å“â€¦ : True Triple Katana")
                 end
             end
         end)
@@ -6523,46 +6563,46 @@ local PlayerFightingStyleSection = PlayerTab:CreateSection({
 })
 
 local Superhuman = PlayerFightingStyleSection:AddLabel({
-	Name = "âŒ : Superhuman",
+	Name = "Ã¢ÂÅ’ : Superhuman",
 	Flag = ""
 })
 
 local Death_Step = PlayerFightingStyleSection:AddLabel({
-	Name = "âŒ : Death Step",
+	Name = "Ã¢ÂÅ’ : Death Step",
 	Flag = ""
 })
 
 local Sharkman_Karate = PlayerFightingStyleSection:AddLabel({
-	Name = "âŒ : Sharkman Karate",
+	Name = "Ã¢ÂÅ’ : Sharkman Karate",
 	Flag = ""
 })
 
 local Electric_Claw = PlayerFightingStyleSection:AddLabel({
-	Name = "âŒ : Electric Claw",
+	Name = "Ã¢ÂÅ’ : Electric Claw",
 	Flag = ""
 })
 
 local Dragon_Talon = PlayerFightingStyleSection:AddLabel({
-	Name = "âŒ : Dragon Talon",
+	Name = "Ã¢ÂÅ’ : Dragon Talon",
 	Flag = ""
 })
 
 spawn(function()
     while task.wait() do
         if game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuySuperhuman",true) == 1 then
-            Superhuman:Set("âœ… : Superhuman")
+            Superhuman:Set("Ã¢Å“â€¦ : Superhuman")
         end
         if game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyDeathStep",true) == 1 then
-            Death_Step:Set("âœ… : Death Step")
+            Death_Step:Set("Ã¢Å“â€¦ : Death Step")
         end
         if game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuySharkmanKarate",true) == 1 then
-            Sharkman_Karate:Set("âœ… : Sharkman Karate")
+            Sharkman_Karate:Set("Ã¢Å“â€¦ : Sharkman Karate")
         end
         if game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyElectricClaw",true) == 1 then
-            Electric_Claw:Set("âœ… : Electric Claw")
+            Electric_Claw:Set("Ã¢Å“â€¦ : Electric Claw")
         end
         if game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("BuyDragonTalon",true) == 1 then
-            Dragon_Talon:Set("âœ… : Dragon Talon")
+            Dragon_Talon:Set("Ã¢Å“â€¦ : Dragon Talon")
         end
     end
 end)
