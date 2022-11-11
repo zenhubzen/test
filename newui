@@ -323,8 +323,8 @@ do
 				if library.Backdrop then
 					library.Backdrop.Visible = library_flags["__Designer.Background.UseBackgroundImage"] and true
 					library.Backdrop.Image = resolveid(library_flags["__Designer.Background.ImageAssetID"], "__Designer.Background.ImageAssetID") or ""
-					library.Backdrop.ImageColor3 = library_flags["__Designer.Background.ImageColor"] or Color3.new(255, 255, 255)
-					library.Backdrop.ImageTransparency = (library_flags["__Designer.Background.ImageTransparency"] or 30) / 100
+					library.Backdrop.ImageColor3 = library_flags["__Designer.Background.ImageColor"] or Color3.new(1, 1, 1)
+					library.Backdrop.ImageTransparency = (library_flags["__Designer.Background.ImageTransparency"] or 100) / 100
 				end
 			end)
 		end
@@ -1575,6 +1575,7 @@ function library:CreateWindow(options, ...)
 	mainBorder.BorderColor3 = library.colors.innerBorder
 	colored[1 + #colored] = {mainBorder, "BorderColor3", "innerBorder"}
 	mainBorder.BorderMode = Enum.BorderMode.Inset
+	mainBorder.Visible = false
 	mainBorder.Position = UDim2.fromScale(0.5, 0.5)
 	mainBorder.Size = UDim2.fromScale(1, 1)
 	innerMain.Name = "innerMain"
@@ -1639,8 +1640,7 @@ function library:CreateWindow(options, ...)
 	headline.LayoutOrder = 1
 	headline.Font = Enum.Font.Code
 	headline.Text = (windowName and tostring(windowName)) or "???"
-	headline.TextColor3 = library.colors.main
-	colored[1 + #colored] = {headline, "TextColor3", "main"}
+	headline.TextColor3 = Color3.fromRGB(255,255,255)
 	headline.TextSize = 14
 	headline.TextStrokeColor3 = library.colors.outerBorder
 	colored[1 + #colored] = {headline, "TextStrokeColor3", "outerBorder"}
