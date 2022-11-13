@@ -324,7 +324,7 @@ do
 					library.Backdrop.Visible = library_flags["__Designer.Background.UseBackgroundImage"] and true
 					library.Backdrop.Image = resolveid(library_flags["__Designer.Background.ImageAssetID"], "__Designer.Background.ImageAssetID") or ""
 					library.Backdrop.ImageColor3 = library_flags["__Designer.Background.ImageColor"] or Color3.new(1, 1, 1)
-					library.Backdrop.ImageTransparency = (library_flags["__Designer.Background.ImageTransparency"] or 1) / 100
+					library.Backdrop.ImageTransparency = (library_flags["__Designer.Background.ImageTransparency"] or 100) / 100
 				end
 			end)
 		end
@@ -1917,9 +1917,8 @@ function library:CreateWindow(options, ...)
 			sectionHeadline.LineHeight = 1.15
 			sectionHeadline.Text = (sectionName and sectionName or "???")
 			sectionHeadline.TextColor3 = library.colors.section
-			colored[1 + #colored] = {sectionHeadline, "TextColor3", "section"
-			sectionHeadline.TextXAlignment = Enum.TextXAlignment.Center
-			sectionHeadline.TextSize = 12
+			colored[1 + #colored] = {sectionHeadline, "TextColor3", "section"}
+			sectionHeadline.TextSize = 14
 			sectionHeadline.Size = UDim2.fromOffset(textToSize(sectionHeadline).X + 4, 12)
 			insideBorderHider.Name = "insideBorderHider"
 			insideBorderHider.Parent = newSection
