@@ -1746,7 +1746,7 @@ function library:CreateWindow(options, ...)
 		else
 			colored_newTab_TextColor3 = {newTab, "TextColor3", "tabText"}
 			colored[1 + #colored] = colored_newTab_TextColor3
-			newTab.Font = Enum.Font.Gotham
+			newTab.Font = Enum.Font.Code
 			newTab.Text = (tabName and tostring(tabName)) or "???"
 			if windowFunctions.tabCount ~= 1 then
 				colored_newTab_TextColor3[4] = 1.35
