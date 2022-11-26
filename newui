@@ -1638,7 +1638,7 @@ function library:CreateWindow(options, ...)
 	headline.BackgroundColor3 = Color3.new(1, 1, 1)
 	headline.BackgroundTransparency = 1
 	headline.LayoutOrder = 1
-	headline.Font = Enum.Font.Gotham
+	headline.Font = Enum.Font.Code
 	headline.Text = (windowName and tostring(windowName)) or "???"
 	headline.TextColor3 = library.colors.main
 	headline.TextSize = 14
