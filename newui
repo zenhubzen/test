@@ -17,8 +17,8 @@ local library = {
 	colors = {
 		main = Color3.fromRGB(255, 255, 255),
 		background = Color3.fromRGB(30, 30, 30),
-		outerBorder = Color3.fromRGB(5, 5, 5),
-		innerBorder = Color3.fromRGB(5, 5, 5),
+		outerBorder = Color3.fromRGB(196, 196, 196),
+		innerBorder = Color3.fromRGB(196, 196, 196),
 		topGradient = Color3.fromRGB(35, 35, 35),
 		bottomGradient = Color3.fromRGB(29, 29, 29),
 		sectionBackground = Color3.fromRGB(35, 34, 34),
@@ -324,7 +324,7 @@ do
 					library.Backdrop.Visible = library_flags["__Designer.Background.UseBackgroundImage"] and true
 					library.Backdrop.Image = resolveid(library_flags["__Designer.Background.ImageAssetID"], "__Designer.Background.ImageAssetID") or ""
 					library.Backdrop.ImageColor3 = library_flags["__Designer.Background.ImageColor"] or Color3.new(1, 1, 1)
-					library.Backdrop.ImageTransparency = (library_flags["__Designer.Background.ImageTransparency"] or 100) / 100
+					library.Backdrop.ImageTransparency = 0
 				end
 			end)
 		end
