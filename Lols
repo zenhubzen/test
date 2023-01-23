@@ -1,0 +1,2 @@
+local key, key2, key3, key4 = "KEY-RYDER", "KEY-TREK", "KEY-PROAX", "KEY-0388488"
+return key and key2 and key3 and key4
