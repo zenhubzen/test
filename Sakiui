@@ -202,7 +202,7 @@ function Library:CreateWindow(title)
     OpenClose.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     OpenClose.Position = UDim2.new(0.00744601665, 0, 0.145157933, 0)
     OpenClose.Size = UDim2.new(0, 35, 0, 35)
-    OpenClose.Image = "rbxassetid://11354741327"
+    OpenClose.Image = "rbxassetid://11447063791"
     OpenClose.ImageColor3 = themes.image
 
     local openclosetog = false
